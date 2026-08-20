@@ -727,7 +727,7 @@ export default function HomePage() {
                             transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
                         >
                             <video
-                                src="/videos/animacion-sf-logo-merak.mp4"
+                                src="/videos/animacion-fondo-blanco-logo-merak.mp4"
                                 autoPlay
                                 loop
                                 muted
