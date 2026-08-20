@@ -21,17 +21,20 @@ const nav = [
 
 function WhatsAppButton({ className = '', label = 'Comprar por WhatsApp' }) {
     return (
-        <a
+        <motion.a
             href={WA}
             target="_blank"
             rel="noreferrer"
-            className={`inline-flex min-h-[48px] items-center justify-center gap-2 rounded-sm bg-[hsl(var(--gold))] px-7 text-[0.78rem] uppercase tracking-[0.18em] text-white shadow-[0_8px_24px_-12px_hsl(var(--gold)/0.85)] transition-all duration-200 ease-out hover:bg-[hsl(var(--gold-deep))] hover:shadow-[0_10px_28px_-10px_hsl(var(--gold)/0.9)] active:scale-[0.98] ${className}`}
+            whileHover={{ scale: 1.03, y: -2 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 18 }}
+            className={`inline-flex min-h-[48px] items-center justify-center gap-2 rounded-sm bg-[hsl(var(--gold))] px-7 text-[0.78rem] uppercase tracking-[0.18em] text-white shadow-[0_8px_24px_-12px_hsl(var(--gold)/0.85)] transition-shadow duration-200 ease-out hover:bg-[hsl(var(--gold-deep))] hover:shadow-[0_10px_28px_-10px_hsl(var(--gold)/0.9)] ${className}`}
         >
             <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current">
                 <path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.38-1.47-.88-.79-1.28-1.55-1.42-1.85-.15-.3-.02-.47.13-.62.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.6-.92-2.19-.24-.57-.49-.5-.67-.5h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.01-1.04 2.46s1.06 2.85 1.21 3.05c.15.2 2.06 3.29 5.02 4.48 2.95 1.19 2.95.79 3.48.74.52-.05 1.7-.69 1.94-1.36.24-.67.24-1.24.17-1.36-.07-.12-.27-.19-.57-.34zM12 22a9.9 9.9 0 0 1-5.03-1.37L3 22l1.4-4.02A9.9 9.9 0 0 1 2 12C2 6.48 6.48 2 12 2s10 4.48 10 10-4.48 10-10 10z" />
             </svg>
             {label}
-        </a>
+        </motion.a>
     );
 }
 
@@ -567,8 +570,18 @@ function SkinQuiz() {
 
 export default function HomePage() {
     const [menuOpen, setMenuOpen] = useState(false);
+    const [tilt, setTilt] = useState({ x: 0, y: 0 });
     const reduce = useReducedMotion();
     const words = 'Ciencia con alma para simplificar tu rutina.'.split(' ');
+
+    const handleHeroTilt = (e) => {
+        if (reduce) return;
+        const rect = e.currentTarget.getBoundingClientRect();
+        const px = (e.clientX - rect.left) / rect.width - 0.5;
+        const py = (e.clientY - rect.top) / rect.height - 0.5;
+        setTilt({ x: py * -8, y: px * 8 });
+    };
+    const resetHeroTilt = () => setTilt({ x: 0, y: 0 });
 
     return (
         <div className="min-h-screen bg-background text-foreground selection:bg-[hsl(var(--gold)/0.2)]">
@@ -642,7 +655,12 @@ export default function HomePage() {
                 <div className="mx-auto grid w-full max-w-[90rem] grid-cols-1 items-center gap-12 px-5 pb-20 pt-14 sm:px-8 lg:min-h-[calc(100dvh-76px)] lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:pb-0 lg:pt-0">
                     <div className="relative">
                         <p className="mb-7 flex items-center gap-4 text-[0.66rem] uppercase tracking-[0.42em] text-gold">
-                            <span className="h-px w-10 bg-[hsl(var(--gold))]" />
+                            <motion.span
+                                initial={reduce ? false : { width: 0 }}
+                                animate={{ width: '2.5rem' }}
+                                transition={{ duration: 0.8, delay: 0.15, ease: 'easeOut' }}
+                                className="h-px bg-[hsl(var(--gold))]"
+                            />
                             Cosmética colombiana
                         </p>
                         <h1 className="font-display text-[2.7rem] font-light leading-[1.04] tracking-[-0.01em] text-foreground sm:text-6xl lg:text-[4.6rem]">
@@ -676,8 +694,19 @@ export default function HomePage() {
                         </div>
                     </div>
 
-                    <div className="relative">
-                        <div className="pointer-events-none absolute -inset-10 hidden rounded-full bg-[radial-gradient(closest-side,hsl(var(--gold)/0.28),transparent)] blur-3xl lg:block" />
+                    <motion.div
+                        className="relative"
+                        style={{ transformPerspective: 1000 }}
+                        animate={{ rotateX: tilt.x, rotateY: tilt.y }}
+                        transition={{ type: 'spring', stiffness: 150, damping: 15 }}
+                        onMouseMove={handleHeroTilt}
+                        onMouseLeave={resetHeroTilt}
+                    >
+                        <motion.div
+                            className="pointer-events-none absolute -inset-10 hidden rounded-full bg-[radial-gradient(closest-side,hsl(var(--gold)/0.28),transparent)] blur-3xl lg:block"
+                            animate={reduce ? {} : { scale: [1, 1.08, 1], opacity: [0.85, 1, 0.85] }}
+                            transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+                        />
                         <motion.img
                             initial={reduce ? false : { opacity: 0, scale: 1.04 }}
                             animate={{ opacity: 1, scale: 1 }}
@@ -688,12 +717,19 @@ export default function HomePage() {
                             loading="eager"
                         />
                         <div className="pointer-events-none absolute left-4 top-4 hidden h-16 w-16 border-l border-t border-[hsl(var(--gold)/0.7)] lg:block" />
+                        <motion.div
+                            className="pointer-events-none absolute -right-5 -top-5 hidden h-16 w-16 items-center justify-center rounded-full border border-[hsl(var(--gold)/0.5)] bg-background/90 shadow-[0_8px_24px_-12px_hsl(var(--gold)/0.5)] backdrop-blur-sm lg:flex"
+                            animate={reduce ? {} : { y: [0, -10, 0] }}
+                            transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+                        >
+                            <img src={LOGO} alt="" className="h-9 w-9 object-contain" />
+                        </motion.div>
                         <div className="absolute bottom-5 left-5 right-5 bg-background/92 p-5 backdrop-blur-sm sm:left-auto sm:w-[17rem]">
                             <Sparkles className="h-4 w-4 text-gold" strokeWidth={1.5} />
                             <p className="mt-3 font-display text-[1.35rem] leading-snug text-foreground">Menos pasos. Mejores decisiones.</p>
                             <p className="mt-2 text-[0.78rem] leading-relaxed text-muted-foreground">Más respeto por la barrera cutánea.</p>
                         </div>
-                    </div>
+                    </motion.div>
                 </div>
 
                 <a
