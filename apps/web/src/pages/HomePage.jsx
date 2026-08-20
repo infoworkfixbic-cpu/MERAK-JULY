@@ -716,7 +716,11 @@ export default function HomePage() {
                             className="relative aspect-[4/5] w-full object-contain lg:aspect-[3/4]"
                             loading="eager"
                         />
-                        <div className="pointer-events-none absolute left-4 top-4 hidden h-16 w-16 border-l border-t border-[hsl(var(--gold)/0.7)] lg:block" />
+                        <motion.div
+                            className="pointer-events-none absolute left-6 top-12 hidden h-16 w-16 border-l border-t border-[hsl(var(--gold)/0.7)] lg:block"
+                            animate={reduce ? {} : { y: [0, -10, 0] }}
+                            transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 0.4 }}
+                        />
                         <motion.div
                             className="pointer-events-none absolute -right-5 -top-5 hidden h-16 w-16 items-center justify-center rounded-full border border-[hsl(var(--gold)/0.5)] bg-background/90 shadow-[0_8px_24px_-12px_hsl(var(--gold)/0.5)] backdrop-blur-sm lg:flex"
                             animate={reduce ? {} : { y: [0, -10, 0] }}
