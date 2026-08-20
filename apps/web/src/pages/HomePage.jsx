@@ -764,8 +764,16 @@ export default function HomePage() {
             <section id="historia" className="relative overflow-hidden bg-background py-24 lg:py-32">
                 <div className="mx-auto grid w-full max-w-[72rem] grid-cols-1 items-center gap-14 px-5 sm:px-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
                     <Reveal>
-                        <div className="relative mx-auto flex h-56 w-56 items-center justify-center border border-[hsl(var(--gold)/0.45)] lg:mx-0">
-                            <img src={LOGO} alt="Símbolo MERAK Derm" className="h-32 w-32 object-contain" />
+                        <div className="relative mx-auto flex h-56 w-56 items-center justify-center overflow-hidden border border-[hsl(var(--gold)/0.45)] lg:mx-0">
+                            <video
+                                src="/videos/animacion-logo-merak.mp4"
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                                className="h-full w-full object-cover"
+                                aria-label="Animación del símbolo MERAK Derm"
+                            />
                         </div>
                     </Reveal>
                     <Reveal delay={0.08}>
