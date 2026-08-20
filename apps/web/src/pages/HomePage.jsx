@@ -635,7 +635,7 @@ export default function HomePage() {
                     </div>
 
                     <div className="relative">
-                        <div className="absolute -left-6 -top-6 hidden h-32 w-32 border border-[hsl(var(--gold)/0.45)] lg:block" />
+                        <div className="pointer-events-none absolute -inset-10 hidden rounded-full bg-[radial-gradient(closest-side,hsl(var(--gold)/0.28),transparent)] blur-3xl lg:block" />
                         <motion.img
                             initial={reduce ? false : { opacity: 0, scale: 1.04 }}
                             animate={{ opacity: 1, scale: 1 }}
@@ -645,12 +645,23 @@ export default function HomePage() {
                             className="relative aspect-[4/5] w-full object-contain lg:aspect-[3/4]"
                             loading="eager"
                         />
+                        <div className="pointer-events-none absolute left-4 top-4 hidden h-16 w-16 border-l border-t border-[hsl(var(--gold)/0.7)] lg:block" />
                         <div className="absolute bottom-5 left-5 right-5 bg-background/92 p-5 backdrop-blur-sm sm:left-auto sm:w-[17rem]">
-                            <p className="font-display text-[1.35rem] leading-snug text-foreground">Menos pasos. Mejores decisiones.</p>
+                            <Sparkles className="h-4 w-4 text-gold" strokeWidth={1.5} />
+                            <p className="mt-3 font-display text-[1.35rem] leading-snug text-foreground">Menos pasos. Mejores decisiones.</p>
                             <p className="mt-2 text-[0.78rem] leading-relaxed text-muted-foreground">Más respeto por la barrera cutánea.</p>
                         </div>
                     </div>
                 </div>
+
+                <a
+                    href="#historia"
+                    aria-label="Descubre más, baja en la página"
+                    className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-[0.6rem] uppercase tracking-[0.32em] text-muted-foreground transition-colors hover:text-gold lg:flex"
+                >
+                    <span>Descubre</span>
+                    <ChevronDown className="h-4 w-4 animate-bounce text-gold" strokeWidth={1.5} />
+                </a>
             </section>
 
             <div className="overflow-hidden border-y border-border bg-background py-4">
