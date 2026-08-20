@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Helmet } from 'react-helmet';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { ChevronDown, Instagram, Menu, X, Droplets, Sparkles, ShieldCheck, Leaf, Rabbit, MapPin, FlaskConical, Truck, Quote } from 'lucide-react';
 import Reveal from '@/components/Reveal';
 import Seo from '@/components/Seo';
@@ -583,6 +583,10 @@ export default function HomePage() {
     };
     const resetHeroTilt = () => setTilt({ x: 0, y: 0 });
 
+    const routineImgRef = useRef(null);
+    const { scrollYProgress: routineScroll } = useScroll({ target: routineImgRef, offset: ['start end', 'end start'] });
+    const routineY = useTransform(routineScroll, [0, 1], reduce ? ['0%', '0%'] : ['-8%', '8%']);
+
     return (
         <div className="min-h-screen bg-background text-foreground selection:bg-[hsl(var(--gold)/0.2)]">
             <Helmet>
@@ -907,27 +911,62 @@ export default function HomePage() {
                         <p className="mt-5 max-w-lg text-[0.98rem] font-light leading-relaxed text-muted-foreground">
                             Tres pasos sostenibles en el tiempo. Sin rutinas de diez productos, sin ruido, sin dañar tu barrera.
                         </p>
-                        <div className="mt-10 space-y-8 border-l border-[hsl(var(--gold)/0.4)] pl-7">
-                            {routine.map((r) => (
-                                <Reveal key={r.step} delay={0.05}>
-                                    <div>
-                                        <p className="font-display text-[0.95rem] tracking-[0.3em] text-gold">{r.step}</p>
-                                        <h3 className="mt-1 font-display text-[1.7rem] font-light text-foreground">{r.title}</h3>
-                                        <p className="mt-2 max-w-lg text-[0.92rem] font-light leading-relaxed text-muted-foreground">{r.text}</p>
-                                    </div>
-                                </Reveal>
-                            ))}
+
+                        <div className="relative mt-12 pl-9">
+                            <motion.span
+                                className="absolute left-0 top-1 w-px bg-[hsl(var(--gold)/0.3)]"
+                                style={{ transformOrigin: 'top' }}
+                                initial={{ height: 0 }}
+                                whileInView={{ height: '100%' }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 1.1, ease: 'easeOut' }}
+                            />
+                            <div className="space-y-10">
+                                {routine.map((r, i) => (
+                                    <Reveal key={r.step} delay={0.05 + i * 0.08}>
+                                        <div className="group relative">
+                                            <motion.span
+                                                className="absolute -left-[2.55rem] top-1.5 h-2.5 w-2.5 rounded-full bg-[hsl(var(--gold))] shadow-[0_0_0_4px_hsl(var(--cream))]"
+                                                initial={{ scale: 0 }}
+                                                whileInView={{ scale: 1 }}
+                                                viewport={{ once: true }}
+                                                transition={{ duration: 0.4, delay: 0.15 + i * 0.15, ease: 'backOut' }}
+                                            />
+                                            <p className="font-display text-[0.95rem] tracking-[0.3em] text-gold transition-transform duration-300 group-hover:translate-x-1.5">
+                                                {r.step}
+                                            </p>
+                                            <h3 className="mt-1 font-display text-[1.7rem] font-light text-foreground">{r.title}</h3>
+                                            <p className="mt-2 max-w-lg text-[0.92rem] font-light leading-relaxed text-muted-foreground">{r.text}</p>
+                                        </div>
+                                    </Reveal>
+                                ))}
+                            </div>
                         </div>
                         <WhatsAppButton className="mt-11" />
                     </div>
-                    <div className="relative">
-                        <img
+
+                    <div ref={routineImgRef} className="relative overflow-hidden">
+                        <motion.div
+                            className="pointer-events-none absolute -inset-8 hidden rounded-full bg-[radial-gradient(closest-side,hsl(var(--gold)/0.22),transparent)] blur-3xl lg:block"
+                            animate={reduce ? {} : { scale: [1, 1.06, 1], opacity: [0.8, 1, 0.8] }}
+                            transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+                        />
+                        <motion.img
+                            style={{ y: routineY }}
+                            initial={reduce ? false : { opacity: 0, scale: 1.05 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 1, ease: 'easeOut' }}
                             src="https://horizons-cdn.hostinger.com/a8ec7c5d-7ba9-4a24-a1db-3b26a1b6d833/c3adeeced15508b9ca40b83b9ddce532.png"
                             alt="Los tres productos MERAK Derm"
                             loading="lazy"
-                            className="aspect-[3/2] w-full object-cover lg:aspect-[4/5]"
+                            className="relative aspect-[3/2] w-full object-cover lg:aspect-[4/5]"
                         />
-                        <div className="absolute -bottom-5 -left-5 hidden h-28 w-28 border border-[hsl(var(--gold)/0.45)] lg:block" />
+                        <motion.div
+                            className="pointer-events-none absolute bottom-6 left-6 hidden h-24 w-24 border-b border-l border-[hsl(var(--gold)/0.6)] lg:block"
+                            animate={reduce ? {} : { y: [0, 8, 0] }}
+                            transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
+                        />
                     </div>
                 </div>
             </section>
