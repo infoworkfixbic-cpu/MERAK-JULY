@@ -764,14 +764,19 @@ export default function HomePage() {
             <section id="historia" className="relative overflow-hidden bg-background py-24 lg:py-32">
                 <div className="mx-auto grid w-full max-w-[72rem] grid-cols-1 items-center gap-14 px-5 sm:px-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
                     <Reveal>
-                        <div className="relative mx-auto flex h-56 w-56 items-center justify-center overflow-hidden border border-[hsl(var(--gold)/0.45)] lg:mx-0">
+                        <div className="relative mx-auto flex h-64 w-64 items-center justify-center lg:mx-0">
+                            <div className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(closest-side,hsl(var(--gold)/0.3),transparent)] blur-2xl" />
                             <video
                                 src="/videos/animacion-logo-merak.mp4"
                                 autoPlay
                                 loop
                                 muted
                                 playsInline
-                                className="h-full w-full object-cover"
+                                className="relative h-60 w-60 object-cover mix-blend-multiply"
+                                style={{
+                                    WebkitMaskImage: 'radial-gradient(circle, black 55%, transparent 78%)',
+                                    maskImage: 'radial-gradient(circle, black 55%, transparent 78%)',
+                                }}
                                 aria-label="Animación del símbolo MERAK Derm"
                             />
                         </div>
