@@ -709,7 +709,7 @@ export default function HomePage() {
                             className="h-36 w-36 overflow-hidden rounded-full sm:h-44 sm:w-44"
                         >
                             <video
-                                src="/videos/animacion-fondo-blanco-logo-merak.mp4"
+                                src="/videos/animacion-logo-merak.mp4"
                                 autoPlay
                                 muted
                                 playsInline
