@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ChevronDown, Instagram, Menu, X, Droplets, Sparkles, ShieldCheck, Leaf, Rabbit, MapPin, FlaskConical, Truck, Quote } from 'lucide-react';
 import Reveal from '@/components/Reveal';
 import Seo from '@/components/Seo';
@@ -419,6 +419,7 @@ function SkinQuiz() {
     const [step, setStep] = useState(0);
     const [skinType, setSkinType] = useState(null);
     const [concern, setConcern] = useState(null);
+    const reduce = useReducedMotion();
 
     const handleSkin = (id) => {
         setSkinType(id);
@@ -445,80 +446,121 @@ function SkinQuiz() {
         }
     }
 
+    const slide = {
+        initial: reduce ? { opacity: 0 } : { opacity: 0, x: 24 },
+        animate: { opacity: 1, x: 0 },
+        exit: reduce ? { opacity: 0 } : { opacity: 0, x: -24 },
+    };
+
     return (
-        <div className="mx-auto max-w-2xl border border-border bg-background p-8 sm:p-10">
-            {step === 0 && (
-                <div>
-                    <p className="text-[0.62rem] uppercase tracking-[0.3em] text-muted-foreground">Pregunta 1 de 2</p>
-                    <h3 className="mt-3 font-display text-[1.6rem] font-light text-foreground">¿Cómo se siente tu piel la mayoría del día?</h3>
-                    <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                        {skinOptions.map((o) => (
-                            <button
-                                key={o.id}
-                                type="button"
-                                onClick={() => handleSkin(o.id)}
-                                className="rounded-sm border border-border px-5 py-4 text-left text-[0.9rem] font-light text-foreground transition-colors hover:border-[hsl(var(--gold))] hover:bg-cream"
-                            >
-                                {o.label}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            )}
+        <div className="relative mx-auto max-w-2xl overflow-hidden border border-border bg-background p-8 sm:p-10">
+            <div className="flex items-center gap-2">
+                {[0, 1, 2].map((s) => (
+                    <span key={s} className="h-1 flex-1 overflow-hidden rounded-full bg-border">
+                        <motion.span
+                            className="block h-full bg-[hsl(var(--gold))]"
+                            initial={{ width: '0%' }}
+                            animate={{ width: step >= s ? '100%' : '0%' }}
+                            transition={{ duration: 0.5, ease: 'easeOut' }}
+                        />
+                    </span>
+                ))}
+            </div>
 
-            {step === 1 && (
-                <div>
-                    <p className="text-[0.62rem] uppercase tracking-[0.3em] text-muted-foreground">Pregunta 2 de 2</p>
-                    <h3 className="mt-3 font-display text-[1.6rem] font-light text-foreground">¿Qué te preocupa más ahora mismo?</h3>
-                    <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                        {concernOptions.map((o) => (
-                            <button
-                                key={o.id}
-                                type="button"
-                                onClick={() => handleConcern(o.id)}
-                                className="rounded-sm border border-border px-5 py-4 text-left text-[0.9rem] font-light text-foreground transition-colors hover:border-[hsl(var(--gold))] hover:bg-cream"
-                            >
-                                {o.label}
-                            </button>
-                        ))}
-                    </div>
-                    <button
-                        type="button"
-                        onClick={() => setStep(0)}
-                        className="mt-6 text-[0.75rem] uppercase tracking-[0.2em] text-muted-foreground underline decoration-1 underline-offset-4"
-                    >
-                        Volver
-                    </button>
-                </div>
-            )}
+            <AnimatePresence mode="wait">
+                {step === 0 && (
+                    <motion.div key="step0" {...slide} transition={{ duration: 0.35, ease: 'easeOut' }}>
+                        <p className="mt-7 text-[0.62rem] uppercase tracking-[0.3em] text-muted-foreground">Pregunta 1 de 2</p>
+                        <h3 className="mt-3 font-display text-[1.6rem] font-light text-foreground">¿Cómo se siente tu piel la mayoría del día?</h3>
+                        <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                            {skinOptions.map((o, i) => (
+                                <motion.button
+                                    key={o.id}
+                                    type="button"
+                                    onClick={() => handleSkin(o.id)}
+                                    initial={reduce ? false : { opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.35, delay: 0.05 * i }}
+                                    whileHover={{ y: -2 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className="rounded-sm border border-border px-5 py-4 text-left text-[0.9rem] font-light text-foreground transition-colors hover:border-[hsl(var(--gold))] hover:bg-cream"
+                                >
+                                    {o.label}
+                                </motion.button>
+                            ))}
+                        </div>
+                    </motion.div>
+                )}
 
-            {step === 2 && recommended && (
-                <div>
-                    <p className="text-[0.62rem] uppercase tracking-[0.3em] text-gold">Tu recomendación</p>
-                    <h3 className="mt-3 font-display text-[1.8rem] font-light text-foreground">{recommended.name}</h3>
-                    <p className="mt-2 text-[0.92rem] font-light leading-relaxed text-muted-foreground">{recommended.lead}</p>
-                    <p className="mt-4 text-[0.85rem] font-light leading-relaxed text-foreground/80">
-                        {recommended.id === 'gel'
-                            ? 'Úsalo mañana y noche sobre piel limpia y, de día, termina siempre con protector solar.'
-                            : 'Es el primer paso de tu rutina. Después, sigue con el Gel Hidratante MERAK Derm mañana y noche.'}
-                    </p>
-                    <div className="mt-7 flex flex-wrap items-center gap-4">
-                        <a
-                            href={`#${recommended.id}`}
-                            className="inline-flex min-h-[48px] items-center justify-center rounded-sm bg-[hsl(var(--gold))] px-7 text-[0.78rem] uppercase tracking-[0.18em] text-white transition-colors hover:bg-[hsl(var(--gold-deep))]"
-                        >
-                            Ver producto
-                        </a>
+                {step === 1 && (
+                    <motion.div key="step1" {...slide} transition={{ duration: 0.35, ease: 'easeOut' }}>
+                        <p className="mt-7 text-[0.62rem] uppercase tracking-[0.3em] text-muted-foreground">Pregunta 2 de 2</p>
+                        <h3 className="mt-3 font-display text-[1.6rem] font-light text-foreground">¿Qué te preocupa más ahora mismo?</h3>
+                        <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                            {concernOptions.map((o, i) => (
+                                <motion.button
+                                    key={o.id}
+                                    type="button"
+                                    onClick={() => handleConcern(o.id)}
+                                    initial={reduce ? false : { opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.35, delay: 0.05 * i }}
+                                    whileHover={{ y: -2 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className="rounded-sm border border-border px-5 py-4 text-left text-[0.9rem] font-light text-foreground transition-colors hover:border-[hsl(var(--gold))] hover:bg-cream"
+                                >
+                                    {o.label}
+                                </motion.button>
+                            ))}
+                        </div>
                         <button
                             type="button"
-                            onClick={reset}
-                            className="text-[0.75rem] uppercase tracking-[0.2em] text-muted-foreground underline decoration-1 underline-offset-4"
+                            onClick={() => setStep(0)}
+                            className="mt-6 text-[0.75rem] uppercase tracking-[0.2em] text-muted-foreground underline decoration-1 underline-offset-4"
                         >
-                            Volver a empezar
+                            Volver
                         </button>
-                    </div>
-                </div>
-            )}
+                    </motion.div>
+                )}
+
+                {step === 2 && recommended && (
+                    <motion.div key="step2" {...slide} transition={{ duration: 0.4, ease: 'easeOut' }}>
+                        <motion.div
+                            initial={reduce ? false : { opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.4, ease: 'easeOut' }}
+                            className="mt-7 flex h-11 w-11 items-center justify-center rounded-full bg-[hsl(var(--gold))] text-white"
+                        >
+                            <Sparkles className="h-5 w-5" strokeWidth={1.5} />
+                        </motion.div>
+                        <p className="mt-4 text-[0.62rem] uppercase tracking-[0.3em] text-gold">Tu recomendación</p>
+                        <h3 className="mt-3 font-display text-[1.8rem] font-light text-foreground">{recommended.name}</h3>
+                        <p className="mt-2 text-[0.92rem] font-light leading-relaxed text-muted-foreground">{recommended.lead}</p>
+                        <p className="mt-4 text-[0.85rem] font-light leading-relaxed text-foreground/80">
+                            {recommended.id === 'gel'
+                                ? 'Úsalo mañana y noche sobre piel limpia y, de día, termina siempre con protector solar.'
+                                : 'Es el primer paso de tu rutina. Después, sigue con el Gel Hidratante MERAK Derm mañana y noche.'}
+                        </p>
+                        <div className="mt-7 flex flex-wrap items-center gap-4">
+                            <motion.a
+                                href={`#${recommended.id}`}
+                                whileHover={{ scale: 1.03 }}
+                                whileTap={{ scale: 0.97 }}
+                                className="inline-flex min-h-[48px] items-center justify-center rounded-sm bg-[hsl(var(--gold))] px-7 text-[0.78rem] uppercase tracking-[0.18em] text-white transition-colors hover:bg-[hsl(var(--gold-deep))]"
+                            >
+                                Ver producto
+                            </motion.a>
+                            <button
+                                type="button"
+                                onClick={reset}
+                                className="text-[0.75rem] uppercase tracking-[0.2em] text-muted-foreground underline decoration-1 underline-offset-4"
+                            >
+                                Volver a empezar
+                            </button>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }
