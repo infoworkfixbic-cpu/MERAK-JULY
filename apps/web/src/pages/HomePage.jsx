@@ -13,6 +13,7 @@ const LINEUP = 'https://horizons-cdn.hostinger.com/a8ec7c5d-7ba9-4a24-a1db-3b26a
 const nav = [
     { label: 'Historia', href: '#historia' },
     { label: 'Filosofía', href: '#filosofia' },
+    { label: 'Para ti', href: '#quiz' },
     { label: 'Productos', href: '#productos' },
     { label: 'Diferenciales', href: '#diferenciales' },
     { label: 'Rutina', href: '#rutina' },
@@ -252,7 +253,8 @@ function ProductCard({ p, i }) {
 
     return (
         <article
-            className={`grid grid-cols-1 items-start gap-8 border-t border-border pt-10 lg:grid-cols-2 lg:gap-16 ${
+            id={p.id}
+            className={`grid grid-cols-1 items-start gap-8 border-t border-border pt-10 lg:grid-cols-2 lg:gap-16 scroll-mt-24 ${
                 i % 2 === 1 ? 'lg:[&>div:first-child]:order-2' : ''
             }`}
         >
@@ -395,6 +397,128 @@ function FaqItem({ item }) {
             </button>
             {open && (
                 <p className="mt-3 max-w-3xl text-[0.95rem] font-light leading-relaxed text-muted-foreground">{item.a}</p>
+            )}
+        </div>
+    );
+}
+
+const skinOptions = [
+    { id: 'grasa', label: 'Grasa o con brillo' },
+    { id: 'seca', label: 'Seca o con tirantez' },
+    { id: 'sensible', label: 'Sensible, se irrita fácil' },
+    { id: 'mixta', label: 'Mixta' },
+];
+
+const concernOptions = [
+    { id: 'poros', label: 'Puntos negros o poros marcados' },
+    { id: 'resequedad', label: 'Resequedad y sensación de tirantez' },
+    { id: 'barrera', label: 'Uso retinol o exfoliantes, cuido mi barrera' },
+    { id: 'simplificar', label: 'Solo quiero simplificar mi rutina' },
+];
+
+function SkinQuiz() {
+    const [step, setStep] = useState(0);
+    const [skinType, setSkinType] = useState(null);
+    const [concern, setConcern] = useState(null);
+
+    const handleSkin = (id) => {
+        setSkinType(id);
+        setStep(1);
+    };
+    const handleConcern = (id) => {
+        setConcern(id);
+        setStep(2);
+    };
+    const reset = () => {
+        setStep(0);
+        setSkinType(null);
+        setConcern(null);
+    };
+
+    let recommended = null;
+    if (step === 2) {
+        if (skinType === 'seca' || skinType === 'sensible' || concern === 'resequedad' || concern === 'barrera') {
+            recommended = products.find((p) => p.id === 'hidratante');
+        } else if (skinType === 'grasa' || concern === 'poros') {
+            recommended = products.find((p) => p.id === 'bha');
+        } else {
+            recommended = products.find((p) => p.id === 'gel');
+        }
+    }
+
+    return (
+        <div className="mx-auto max-w-2xl border border-border bg-background p-8 sm:p-10">
+            {step === 0 && (
+                <div>
+                    <p className="text-[0.62rem] uppercase tracking-[0.3em] text-muted-foreground">Pregunta 1 de 2</p>
+                    <h3 className="mt-3 font-display text-[1.6rem] font-light text-foreground">¿Cómo se siente tu piel la mayoría del día?</h3>
+                    <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                        {skinOptions.map((o) => (
+                            <button
+                                key={o.id}
+                                type="button"
+                                onClick={() => handleSkin(o.id)}
+                                className="rounded-sm border border-border px-5 py-4 text-left text-[0.9rem] font-light text-foreground transition-colors hover:border-[hsl(var(--gold))] hover:bg-cream"
+                            >
+                                {o.label}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {step === 1 && (
+                <div>
+                    <p className="text-[0.62rem] uppercase tracking-[0.3em] text-muted-foreground">Pregunta 2 de 2</p>
+                    <h3 className="mt-3 font-display text-[1.6rem] font-light text-foreground">¿Qué te preocupa más ahora mismo?</h3>
+                    <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                        {concernOptions.map((o) => (
+                            <button
+                                key={o.id}
+                                type="button"
+                                onClick={() => handleConcern(o.id)}
+                                className="rounded-sm border border-border px-5 py-4 text-left text-[0.9rem] font-light text-foreground transition-colors hover:border-[hsl(var(--gold))] hover:bg-cream"
+                            >
+                                {o.label}
+                            </button>
+                        ))}
+                    </div>
+                    <button
+                        type="button"
+                        onClick={() => setStep(0)}
+                        className="mt-6 text-[0.75rem] uppercase tracking-[0.2em] text-muted-foreground underline decoration-1 underline-offset-4"
+                    >
+                        Volver
+                    </button>
+                </div>
+            )}
+
+            {step === 2 && recommended && (
+                <div>
+                    <p className="text-[0.62rem] uppercase tracking-[0.3em] text-gold">Tu recomendación</p>
+                    <h3 className="mt-3 font-display text-[1.8rem] font-light text-foreground">{recommended.name}</h3>
+                    <p className="mt-2 text-[0.92rem] font-light leading-relaxed text-muted-foreground">{recommended.lead}</p>
+                    <p className="mt-4 text-[0.85rem] font-light leading-relaxed text-foreground/80">
+                        {recommended.id === 'gel'
+                            ? 'Úsalo mañana y noche sobre piel limpia y, de día, termina siempre con protector solar.'
+                            : 'Es el primer paso de tu rutina. Después, sigue con el Gel Hidratante MERAK Derm mañana y noche.'}
+                    </p>
+                    <div className="mt-7 flex flex-wrap items-center gap-4">
+                        <a
+                            href={`#${recommended.id}`}
+                            className="inline-flex min-h-[48px] items-center justify-center rounded-sm bg-[hsl(var(--gold))] px-7 text-[0.78rem] uppercase tracking-[0.18em] text-white transition-colors hover:bg-[hsl(var(--gold-deep))]"
+                        >
+                            Ver producto
+                        </a>
+                        <button
+                            type="button"
+                            onClick={reset}
+                            className="text-[0.75rem] uppercase tracking-[0.2em] text-muted-foreground underline decoration-1 underline-offset-4"
+                        >
+                            Volver a empezar
+                        </button>
+                    </div>
+                </div>
             )}
         </div>
     );
@@ -595,6 +719,23 @@ export default function HomePage() {
                         </Reveal>
                     ))}
                 </div>
+            </section>
+
+            <section id="quiz" className="mx-auto w-full max-w-[72rem] px-5 py-24 sm:px-8 lg:py-32">
+                <Reveal>
+                    <p className="text-[0.66rem] uppercase tracking-[0.42em] text-gold">Encuentra tu producto</p>
+                    <h2 className="mt-4 max-w-2xl font-display text-[2.1rem] font-light leading-[1.12] text-foreground sm:text-[2.9rem]">
+                        ¿Cuál rutina necesita tu piel?
+                    </h2>
+                    <p className="mt-4 max-w-xl text-[0.95rem] font-light leading-relaxed text-muted-foreground">
+                        Dos preguntas rápidas y te decimos por cuál producto empezar.
+                    </p>
+                </Reveal>
+                <Reveal delay={0.08}>
+                    <div className="mt-10">
+                        <SkinQuiz />
+                    </div>
+                </Reveal>
             </section>
 
             <section id="productos" className="bg-cream py-24 lg:py-32">
