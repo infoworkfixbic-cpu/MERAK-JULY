@@ -574,6 +574,57 @@ function SkinQuiz() {
     );
 }
 
+function TestimonialCarousel() {
+    const [index, setIndex] = useState(0);
+    const reduce = useReducedMotion();
+
+    useEffect(() => {
+        if (reduce) return undefined;
+        const timer = setInterval(() => {
+            setIndex((i) => (i + 1) % testimonials.length);
+        }, 5000);
+        return () => clearInterval(timer);
+    }, [reduce]);
+
+    const t = testimonials[index];
+
+    return (
+        <div className="mx-auto max-w-2xl">
+            <div className="relative overflow-hidden border border-border bg-background p-8 sm:p-10">
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={index}
+                        initial={reduce ? { opacity: 0 } : { opacity: 0, x: 24 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={reduce ? { opacity: 0 } : { opacity: 0, x: -24 }}
+                        transition={{ duration: 0.4, ease: 'easeOut' }}
+                    >
+                        <Quote className="h-6 w-6 text-gold" strokeWidth={1.3} />
+                        <p className="mt-5 text-[1.05rem] font-light leading-relaxed text-foreground/90">“{t.quote}”</p>
+                        <div className="mt-6">
+                            <p className="text-[0.85rem] font-medium text-foreground">{t.name} · {t.location}</p>
+                            <p className="mt-1 text-[0.72rem] uppercase tracking-[0.18em] text-muted-foreground">{t.product}</p>
+                        </div>
+                    </motion.div>
+                </AnimatePresence>
+            </div>
+            <div className="mt-6 flex items-center justify-center gap-2">
+                {testimonials.map((testimonial, i) => (
+                    <button
+                        key={testimonial.name}
+                        type="button"
+                        onClick={() => setIndex(i)}
+                        aria-label={`Ver testimonio de ${testimonial.name}`}
+                        className={`h-1.5 rounded-full transition-all duration-300 ${
+                            i === index ? 'w-6 bg-[hsl(var(--gold))]' : 'w-1.5 bg-border hover:bg-[hsl(var(--gold)/0.5)]'
+                        }`}
+                    />
+                ))}
+            </div>
+        </div>
+    );
+}
+
 export default function HomePage() {
     const [menuOpen, setMenuOpen] = useState(false);
     const [tilt, setTilt] = useState({ x: 0, y: 0 });
@@ -623,8 +674,52 @@ export default function HomePage() {
         return () => clearInterval(interval);
     }, []);
 
+    const [showIntro, setShowIntro] = useState(true);
+    useEffect(() => {
+        if (reduce) {
+            setShowIntro(false);
+            return undefined;
+        }
+        document.body.style.overflow = 'hidden';
+        const timer = setTimeout(() => {
+            setShowIntro(false);
+            document.body.style.overflow = '';
+        }, 1900);
+        return () => {
+            clearTimeout(timer);
+            document.body.style.overflow = '';
+        };
+    }, [reduce]);
+
     return (
         <div className="min-h-screen bg-background text-foreground selection:bg-[hsl(var(--gold)/0.2)]">
+            <AnimatePresence>
+                {showIntro && (
+                    <motion.div
+                        key="intro"
+                        initial={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.6, ease: 'easeInOut' }}
+                        className="fixed inset-0 z-[100] flex items-center justify-center bg-cream"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.85, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ duration: 0.6, ease: 'easeOut' }}
+                            className="h-36 w-36 overflow-hidden rounded-full sm:h-44 sm:w-44"
+                        >
+                            <video
+                                src="/videos/animacion-fondo-blanco-logo-merak.mp4"
+                                autoPlay
+                                muted
+                                playsInline
+                                className="h-full w-full object-cover"
+                                aria-label="MERAK Derm"
+                            />
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
             <Helmet>
                 <title>MERAK Derm | Cosmética colombiana para rutinas simples</title>
                 <meta
@@ -1029,19 +1124,8 @@ export default function HomePage() {
                     </h2>
                 </Reveal>
 
-                <div className="mt-12 grid grid-cols-1 gap-px border border-border bg-border sm:grid-cols-3">
-                    {testimonials.map((t, i) => (
-                        <Reveal key={t.name} delay={i * 0.08}>
-                            <div className="flex h-full flex-col justify-between gap-6 bg-background p-7">
-                                <Quote className="h-6 w-6 text-gold" strokeWidth={1.3} />
-                                <p className="text-[0.95rem] font-light leading-relaxed text-foreground/90">“{t.quote}”</p>
-                                <div>
-                                    <p className="text-[0.85rem] font-medium text-foreground">{t.name} · {t.location}</p>
-                                    <p className="mt-1 text-[0.72rem] uppercase tracking-[0.18em] text-muted-foreground">{t.product}</p>
-                                </div>
-                            </div>
-                        </Reveal>
-                    ))}
+                <div className="mt-12">
+                    <TestimonialCarousel />
                 </div>
             </section>
 
