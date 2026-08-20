@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300&family=Jost:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital,wght@0,400;1,400&family=Jost:wght@300;400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -41,8 +41,7 @@ body {
 
 @layer utilities {
   .font-display {
-    font-family: "Fraunces", serif;
-    font-optical-sizing: auto;
+    font-family: "Instrument Serif", serif;
   }
   .text-gold {
     color: hsl(var(--gold));
