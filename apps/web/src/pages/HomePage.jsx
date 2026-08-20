@@ -11,6 +11,7 @@ const LOGO = 'https://horizons-cdn.hostinger.com/a8ec7c5d-7ba9-4a24-a1db-3b26a1b
 const LINEUP = 'https://horizons-cdn.hostinger.com/a8ec7c5d-7ba9-4a24-a1db-3b26a1b6d833/10a82b05804e35ee8ae9b5557be0cfe9.png';
 
 const nav = [
+    { label: 'Historia', href: '#historia' },
     { label: 'Filosofía', href: '#filosofia' },
     { label: 'Productos', href: '#productos' },
     { label: 'Diferenciales', href: '#diferenciales' },
@@ -215,7 +216,7 @@ function ProductCard({ p, i }) {
                         src={img}
                         alt={`${p.name} MERAK Derm`}
                         loading="lazy"
-                        className="aspect-[4/5] w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02] sm:aspect-[4/3]"
+                        className="aspect-[4/5] w-full object-contain p-8 transition-transform duration-500 ease-out group-hover:scale-[1.02] sm:aspect-[4/3] sm:p-10"
                     />
                 </figure>
                 <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
@@ -224,12 +225,12 @@ function ProductCard({ p, i }) {
                             key={src}
                             type="button"
                             onClick={() => setImg(src)}
-                            className={`h-16 w-14 shrink-0 overflow-hidden border transition-colors ${
+                            className={`h-16 w-14 shrink-0 overflow-hidden border bg-background transition-colors ${
                                 img === src ? 'border-[hsl(var(--gold))]' : 'border-border'
                             }`}
                             aria-label="Ver foto del producto"
                         >
-                            <img src={src} alt="" className="h-full w-full object-cover" loading="lazy" />
+                            <img src={src} alt="" className="h-full w-full object-contain p-1" loading="lazy" />
                         </button>
                     ))}
                 </div>
@@ -477,6 +478,32 @@ export default function HomePage() {
                     ))}
                 </div>
             </div>
+
+            <section id="historia" className="relative overflow-hidden bg-background py-24 lg:py-32">
+                <div className="mx-auto grid w-full max-w-[72rem] grid-cols-1 items-center gap-14 px-5 sm:px-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
+                    <Reveal>
+                        <div className="relative mx-auto flex h-56 w-56 items-center justify-center border border-[hsl(var(--gold)/0.45)] lg:mx-0">
+                            <img src={LOGO} alt="Símbolo MERAK Derm" className="h-32 w-32 object-contain" />
+                        </div>
+                    </Reveal>
+                    <Reveal delay={0.08}>
+                        <p className="text-[0.66rem] uppercase tracking-[0.42em] text-gold">Nuestra historia</p>
+                        <h2 className="mt-4 font-display text-[2.1rem] font-light leading-[1.12] text-foreground sm:text-[2.9rem]">
+                            ¿Qué es <span className="italic text-gold">MERAK</span>?
+                        </h2>
+                        <p className="mt-6 max-w-2xl text-[0.98rem] font-light leading-relaxed text-foreground/90">
+                            MERAK es una palabra sin traducción exacta que describe el placer de encontrar plenitud en los
+                            pequeños gestos: un ritual simple, un momento de calma, un cuidado bien hecho. Así nació MERAK
+                            Derm, con la convicción de que cuidar tu piel no debería ser complicado para sentirse valioso.
+                        </p>
+                        <p className="mt-4 max-w-2xl text-[0.95rem] font-light leading-relaxed text-muted-foreground">
+                            Nuestro símbolo es una mariposa: representa la transformación gradual y consciente que
+                            acompaña cada rutina bien pensada. Igual que la piel, se transforma con paciencia, ciencia y
+                            constancia, no de un día para otro.
+                        </p>
+                    </Reveal>
+                </div>
+            </section>
 
             <section id="filosofia" className="mx-auto w-full max-w-[72rem] px-5 py-24 sm:px-8 lg:py-32">
                 <Reveal>
