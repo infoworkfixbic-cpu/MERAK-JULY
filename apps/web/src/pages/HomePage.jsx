@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { ChevronDown, Instagram, Menu, X, Droplets, Sparkles, ShieldCheck, Leaf, Rabbit, MapPin, FlaskConical, Truck, Quote } from 'lucide-react';
@@ -17,6 +17,12 @@ const nav = [
     { label: 'Productos', href: '#productos' },
     { label: 'Diferenciales', href: '#diferenciales' },
     { label: 'Rutina', href: '#rutina' },
+];
+
+const waMessages = [
+    'Mejora tu piel con un solo mensaje',
+    '¿Dudas sobre tu rutina? Escríbenos',
+    'Tu rutina ideal, a un mensaje de distancia',
 ];
 
 function WhatsAppButton({ className = '', label = 'Comprar por WhatsApp' }) {
@@ -587,6 +593,36 @@ export default function HomePage() {
     const { scrollYProgress: routineScroll } = useScroll({ target: routineImgRef, offset: ['start end', 'end start'] });
     const routineY = useTransform(routineScroll, [0, 1], reduce ? ['0%', '0%'] : ['-8%', '8%']);
 
+    const [activeSection, setActiveSection] = useState('');
+    useEffect(() => {
+        const ids = nav.map((n) => n.href.slice(1));
+        const elements = ids.map((id) => document.getElementById(id)).filter(Boolean);
+        if (!elements.length) return undefined;
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) setActiveSection(entry.target.id);
+                });
+            },
+            { rootMargin: '-45% 0px -45% 0px', threshold: 0 }
+        );
+        elements.forEach((el) => observer.observe(el));
+        return () => observer.disconnect();
+    }, []);
+
+    const [msgIndex, setMsgIndex] = useState(0);
+    const [showBubble, setShowBubble] = useState(true);
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setShowBubble(false);
+            setTimeout(() => {
+                setMsgIndex((i) => (i + 1) % waMessages.length);
+                setShowBubble(true);
+            }, 400);
+        }, 4500);
+        return () => clearInterval(interval);
+    }, []);
+
     return (
         <div className="min-h-screen bg-background text-foreground selection:bg-[hsl(var(--gold)/0.2)]">
             <Helmet>
@@ -613,15 +649,27 @@ export default function HomePage() {
                         </span>
                     </a>
                     <nav className="hidden items-center gap-9 md:flex">
-                        {nav.map((n) => (
-                            <a
-                                key={n.href}
-                                href={n.href}
-                                className="relative text-[0.72rem] uppercase tracking-[0.22em] text-muted-foreground transition-colors hover:text-foreground"
-                            >
-                                {n.label}
-                            </a>
-                        ))}
+                        {nav.map((n) => {
+                            const isActive = activeSection === n.href.slice(1);
+                            return (
+                                <a
+                                    key={n.href}
+                                    href={n.href}
+                                    className={`relative pb-1 text-[0.72rem] uppercase tracking-[0.22em] transition-colors ${
+                                        isActive ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+                                    }`}
+                                >
+                                    {n.label}
+                                    {isActive && (
+                                        <motion.span
+                                            layoutId="nav-underline"
+                                            className="absolute -bottom-1 left-0 right-0 h-px bg-[hsl(var(--gold))]"
+                                            transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+                                        />
+                                    )}
+                                </a>
+                            );
+                        })}
                     </nav>
                     <div className="flex items-center gap-3">
                         <a href={IG} target="_blank" rel="noreferrer" aria-label="Instagram @merakderm" className="hidden text-muted-foreground transition-colors hover:text-gold sm:block">
@@ -645,7 +693,9 @@ export default function HomePage() {
                                 key={n.href}
                                 href={n.href}
                                 onClick={() => setMenuOpen(false)}
-                                className="block border-b border-border/60 py-4 text-[0.8rem] uppercase tracking-[0.2em] text-muted-foreground"
+                                className={`block border-b border-border/60 py-4 text-[0.8rem] uppercase tracking-[0.2em] transition-colors ${
+                                    activeSection === n.href.slice(1) ? 'text-gold' : 'text-muted-foreground'
+                                }`}
                             >
                                 {n.label}
                             </a>
@@ -1072,6 +1122,24 @@ export default function HomePage() {
                     </div>
                 </div>
             </footer>
+
+            <AnimatePresence>
+                {showBubble && (
+                    <motion.a
+                        key={msgIndex}
+                        href={WA}
+                        target="_blank"
+                        rel="noreferrer"
+                        initial={{ opacity: 0, x: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, x: 0, scale: 1 }}
+                        exit={{ opacity: 0, x: 10, scale: 0.95 }}
+                        transition={{ duration: 0.35, ease: 'easeOut' }}
+                        className="fixed bottom-9 right-24 z-50 hidden max-w-[13rem] rounded-full bg-background px-4 py-2.5 text-[0.75rem] font-light text-foreground shadow-[0_10px_30px_-10px_rgba(0,0,0,0.25)] transition-colors hover:text-gold sm:block lg:bottom-12 lg:right-28"
+                    >
+                        {waMessages[msgIndex]}
+                    </motion.a>
+                )}
+            </AnimatePresence>
 
             <a
                 href={WA}
