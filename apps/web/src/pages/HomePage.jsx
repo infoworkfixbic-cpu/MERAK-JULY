@@ -211,12 +211,12 @@ function ProductCard({ p, i }) {
             }`}
         >
             <div>
-                <figure className="group relative overflow-hidden bg-background">
+                <figure className="group relative overflow-hidden rounded-sm bg-background">
                     <img
                         src={img}
                         alt={`${p.name} MERAK Derm`}
                         loading="lazy"
-                        className="aspect-[4/5] w-full object-contain p-8 transition-transform duration-500 ease-out group-hover:scale-[1.02] sm:aspect-[4/3] sm:p-10"
+                        className="block h-auto w-full max-h-[36rem] mx-auto object-contain transition-transform duration-500 ease-out group-hover:scale-[1.02]"
                     />
                 </figure>
                 <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
