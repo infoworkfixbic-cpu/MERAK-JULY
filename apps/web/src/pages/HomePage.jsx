@@ -722,11 +722,19 @@ export default function HomePage() {
                             transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 0.4 }}
                         />
                         <motion.div
-                            className="pointer-events-none absolute right-6 top-12 hidden h-16 w-16 items-center justify-center rounded-full border border-[hsl(var(--gold)/0.5)] bg-background/90 shadow-[0_8px_24px_-12px_hsl(var(--gold)/0.5)] backdrop-blur-sm lg:flex"
+                            className="pointer-events-none absolute right-6 top-12 hidden h-16 w-16 items-center justify-center overflow-hidden rounded-full border border-[hsl(var(--gold)/0.5)] bg-background/90 shadow-[0_8px_24px_-12px_hsl(var(--gold)/0.5)] backdrop-blur-sm lg:flex"
                             animate={reduce ? {} : { y: [0, -10, 0] }}
                             transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
                         >
-                            <img src={LOGO} alt="" className="h-9 w-9 object-contain" />
+                            <video
+                                src="/videos/animacion-logo-merak.mp4"
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                                className="h-full w-full object-cover"
+                                aria-label="Animación del símbolo MERAK Derm"
+                            />
                         </motion.div>
                         <div className="absolute bottom-5 left-5 right-5 bg-background/92 p-5 backdrop-blur-sm sm:left-auto sm:w-[17rem]">
                             <Sparkles className="h-4 w-4 text-gold" strokeWidth={1.5} />
