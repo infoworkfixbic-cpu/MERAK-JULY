@@ -711,25 +711,27 @@ export default function HomePage() {
                         <h2 className="font-display text-[2.1rem] font-light leading-[1.12] text-foreground sm:text-[2.9rem]">
                             No necesitas más productos. Necesitas <span className="italic text-gold">entender mejor</span> tu piel.
                         </h2>
-                        <p className="self-end text-[1rem] font-light leading-relaxed text-muted-foreground">
+                        <p className="self-end border-l border-[hsl(var(--gold)/0.45)] pl-6 text-[1rem] font-light leading-relaxed text-muted-foreground">
                             MERAK Derm simplifica el cuidado de la piel con fórmulas funcionales, educación clara y rutinas simples. Menos pasos,
                             mejores decisiones y más respeto por la barrera cutánea.
                         </p>
                     </div>
                 </Reveal>
 
-                <div className="mt-16 divide-y divide-border border-t border-border">
+                <div className="mt-16 grid grid-cols-1 gap-px overflow-hidden border border-border bg-border sm:grid-cols-3">
                     {pillars.map((p, i) => (
-                        <Reveal key={p.title} delay={i * 0.08}>
-                            <div className="group grid grid-cols-1 items-center gap-6 py-10 transition-colors duration-300 hover:bg-cream sm:grid-cols-[3.5rem_3.5rem_14rem_1fr] sm:gap-8 sm:py-12">
-                                <span className="font-display text-[2rem] font-light leading-none text-[hsl(var(--gold)/0.3)] transition-colors duration-300 group-hover:text-gold">
+                        <Reveal key={p.title} delay={i * 0.1}>
+                            <div className="group relative flex h-full flex-col gap-6 overflow-hidden bg-background p-8 transition-all duration-300 hover:-translate-y-1 hover:bg-cream sm:p-10">
+                                <span className="pointer-events-none absolute -right-3 -top-7 select-none font-display text-[7rem] font-light leading-none text-border transition-colors duration-300 group-hover:text-[hsl(var(--gold)/0.3)] sm:text-[8rem]">
                                     0{i + 1}
                                 </span>
-                                <span className="flex h-12 w-12 items-center justify-center rounded-full border border-[hsl(var(--gold)/0.4)] transition-all duration-300 group-hover:scale-110 group-hover:border-[hsl(var(--gold))]">
+                                <span className="relative flex h-12 w-12 items-center justify-center rounded-full border border-[hsl(var(--gold)/0.4)] transition-colors duration-300 group-hover:border-[hsl(var(--gold))]">
                                     <p.icon className="h-5 w-5 text-gold" strokeWidth={1.4} />
                                 </span>
-                                <h3 className="font-display text-[1.6rem] font-light text-foreground">{p.title}</h3>
-                                <p className="max-w-xl text-[0.95rem] font-light leading-relaxed text-muted-foreground">{p.text}</p>
+                                <div className="relative">
+                                    <h3 className="font-display text-[1.7rem] font-light leading-tight text-foreground">{p.title}</h3>
+                                    <p className="mt-3 text-[0.92rem] font-light leading-relaxed text-muted-foreground">{p.text}</p>
+                                </div>
                             </div>
                         </Reveal>
                     ))}
