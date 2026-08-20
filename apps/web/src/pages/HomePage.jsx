@@ -774,8 +774,8 @@ export default function HomePage() {
                                 playsInline
                                 className="relative h-60 w-60 object-cover mix-blend-multiply"
                                 style={{
-                                    WebkitMaskImage: 'radial-gradient(circle, black 55%, transparent 78%)',
-                                    maskImage: 'radial-gradient(circle, black 55%, transparent 78%)',
+                                    WebkitMaskImage: 'radial-gradient(circle closest-side, black 40%, transparent 100%)',
+                                    maskImage: 'radial-gradient(circle closest-side, black 40%, transparent 100%)',
                                 }}
                                 aria-label="Animación del símbolo MERAK Derm"
                             />
