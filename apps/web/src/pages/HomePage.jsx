@@ -679,7 +679,7 @@ export default function HomePage() {
                                     {w === 'alma' ? (
                                         <span className="relative italic">
                                             {w}
-                                            <span className="absolute -bottom-1 left-0 h-[3px] w-full rounded-full bg-[hsl(var(--gold)/0.55)]" />
+                                            <span className="absolute bottom-[0.14em] left-0 h-[3px] w-full rounded-full bg-[hsl(var(--gold)/0.55)]" />
                                         </span>
                                     ) : (
                                         w
