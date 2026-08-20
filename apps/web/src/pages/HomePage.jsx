@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { motion, useReducedMotion } from 'framer-motion';
-import { ChevronDown, Instagram, Menu, X, Droplets, Sparkles, ShieldCheck, Leaf, Rabbit, MapPin, FlaskConical } from 'lucide-react';
+import { ChevronDown, Instagram, Menu, X, Droplets, Sparkles, ShieldCheck, Leaf, Rabbit, MapPin, FlaskConical, Truck, CreditCard, Quote } from 'lucide-react';
 import Reveal from '@/components/Reveal';
 import Seo from '@/components/Seo';
 
@@ -192,6 +192,52 @@ const diferenciales = [
     { icon: ShieldCheck, label: 'Apto para piel sensible' },
     { icon: Rabbit, label: 'Cruelty free' },
     { icon: MapPin, label: 'Hecho en Colombia' },
+    { icon: Truck, label: 'Envíos a toda Colombia' },
+    { icon: CreditCard, label: 'Pago contra entrega o transferencia' },
+];
+
+const testimonials = [
+    {
+        name: 'Camila R.',
+        location: 'Cali',
+        product: 'Limpiador Facial BHA 2%',
+        quote: 'Tenía la piel grasa y con poros súper marcados. En un mes ya se siente más equilibrada, sin esa sensación de resequedad que me dejaban otros productos con ácido salicílico.',
+    },
+    {
+        name: 'Valentina M.',
+        location: 'Bogotá',
+        product: 'Gel Hidratante',
+        quote: 'Lo que más valoro es que explican por qué usar cada activo, no solo venden el producto. Se nota que hay ciencia detrás, no es solo marketing.',
+    },
+    {
+        name: 'Daniela P.',
+        location: 'Medellín',
+        product: 'Limpiador Hidratante',
+        quote: 'Uso retinol de noche y necesitaba algo que no me dejara la piel tirante al lavarla. Este limpiador cumplió exactamente eso desde la primera semana.',
+    },
+];
+
+const faqs = [
+    {
+        q: '¿Cuánto dura un envase con uso normal?',
+        a: 'Con uso diario, mañana y noche, un envase suele durar entre 6 y 8 semanas. La duración exacta depende de la cantidad que uses en cada aplicación.',
+    },
+    {
+        q: '¿Los productos son aptos para piel sensible?',
+        a: 'Sí. Todas nuestras fórmulas están pensadas para respetar la barrera cutánea y son aptas para piel sensible. Aun así, recomendamos hacer una prueba en una zona pequeña 24 horas antes del primer uso.',
+    },
+    {
+        q: '¿Hacen envíos a toda Colombia?',
+        a: 'Sí, hacemos envíos a nivel nacional. Puedes pagar contra entrega en las principales ciudades o por transferencia. Escríbenos por WhatsApp y te confirmamos tiempos y costos según tu ciudad.',
+    },
+    {
+        q: '¿En cuánto tiempo se empiezan a ver resultados?',
+        a: 'Depende del producto y de tu piel, pero en general los primeros cambios en confort y equilibrio se notan entre la segunda y cuarta semana de uso constante. La constancia es la clave.',
+    },
+    {
+        q: '¿Puedo combinar los tres productos en una misma rutina?',
+        a: 'Sí, están diseñados para complementarse: eliges el limpiador según tu tipo de piel (BHA 2% o Hidratante), sigues con el Gel Hidratante y terminas con protector solar en el día.',
+    },
 ];
 
 const routine = [
@@ -331,6 +377,26 @@ function ProductCard({ p, i }) {
                 )}
             </div>
         </article>
+    );
+}
+
+function FaqItem({ item }) {
+    const [open, setOpen] = useState(false);
+    return (
+        <div className="border-b border-border py-6">
+            <button
+                type="button"
+                onClick={() => setOpen((v) => !v)}
+                className="flex w-full items-center justify-between gap-4 text-left"
+                aria-expanded={open}
+            >
+                <span className="font-display text-[1.25rem] font-light text-foreground sm:text-[1.4rem]">{item.q}</span>
+                <ChevronDown className={`h-5 w-5 shrink-0 text-gold transition-transform ${open ? 'rotate-180' : ''}`} strokeWidth={1.5} />
+            </button>
+            {open && (
+                <p className="mt-3 max-w-3xl text-[0.95rem] font-light leading-relaxed text-muted-foreground">{item.a}</p>
+            )}
+        </div>
     );
 }
 
@@ -600,6 +666,57 @@ export default function HomePage() {
                         />
                         <div className="absolute -bottom-5 -left-5 hidden h-28 w-28 border border-[hsl(var(--gold)/0.45)] lg:block" />
                     </div>
+                </div>
+            </section>
+
+            <section id="testimonios" className="mx-auto w-full max-w-[80rem] px-5 py-24 sm:px-8 lg:py-32">
+                <Reveal>
+                    <p className="text-[0.66rem] uppercase tracking-[0.42em] text-gold">Lo que dicen</p>
+                    <h2 className="mt-4 max-w-2xl font-display text-[2.1rem] font-light leading-[1.12] text-foreground sm:text-[2.9rem]">
+                        Historias reales de piel real.
+                    </h2>
+                </Reveal>
+
+                <div className="mt-12 grid grid-cols-1 gap-px border border-border bg-border sm:grid-cols-3">
+                    {testimonials.map((t, i) => (
+                        <Reveal key={t.name} delay={i * 0.08}>
+                            <div className="flex h-full flex-col justify-between gap-6 bg-background p-7">
+                                <Quote className="h-6 w-6 text-gold" strokeWidth={1.3} />
+                                <p className="text-[0.95rem] font-light leading-relaxed text-foreground/90">“{t.quote}”</p>
+                                <div>
+                                    <p className="text-[0.85rem] font-medium text-foreground">{t.name} · {t.location}</p>
+                                    <p className="mt-1 text-[0.72rem] uppercase tracking-[0.18em] text-muted-foreground">{t.product}</p>
+                                </div>
+                            </div>
+                        </Reveal>
+                    ))}
+                </div>
+            </section>
+
+            <section id="faq" className="bg-cream py-24 lg:py-32">
+                <div className="mx-auto w-full max-w-[64rem] px-5 sm:px-8">
+                    <Reveal>
+                        <p className="text-[0.66rem] uppercase tracking-[0.42em] text-gold">Preguntas frecuentes</p>
+                        <h2 className="mt-4 max-w-2xl font-display text-[2.1rem] font-light leading-[1.12] text-foreground sm:text-[2.9rem]">
+                            Resolvamos tus dudas.
+                        </h2>
+                    </Reveal>
+
+                    <div className="mt-12 border-t border-border">
+                        {faqs.map((f, i) => (
+                            <Reveal key={f.q} delay={i * 0.05}>
+                                <FaqItem item={f} />
+                            </Reveal>
+                        ))}
+                    </div>
+
+                    <p className="mt-8 text-[0.9rem] font-light text-muted-foreground">
+                        ¿Tienes otra pregunta?{' '}
+                        <a href={WA} target="_blank" rel="noreferrer" className="text-gold underline decoration-1 underline-offset-4">
+                            Escríbenos por WhatsApp
+                        </a>
+                        .
+                    </p>
                 </div>
             </section>
 
