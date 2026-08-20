@@ -231,7 +231,7 @@ const faqs = [
     },
     {
         q: '¿Hacen envíos a toda Colombia?',
-        a: 'Sí, hacemos envíos a nivel nacional. Puedes pagar contra entrega en las principales ciudades o por transferencia. Escríbenos por WhatsApp y te confirmamos tiempos y costos según tu ciudad.',
+        a: 'Sí, hacemos envíos a nivel nacional. El pago es por transferencia. Escríbenos por WhatsApp y te confirmamos tiempos y costos según tu ciudad.',
     },
     {
         q: '¿En cuánto tiempo se empiezan a ver resultados?',
