@@ -721,8 +721,13 @@ export default function HomePage() {
                 <div className="mt-16 divide-y divide-border border-t border-border">
                     {pillars.map((p, i) => (
                         <Reveal key={p.title} delay={i * 0.08}>
-                            <div className="grid grid-cols-1 gap-4 py-9 sm:grid-cols-[auto_14rem_1fr] sm:items-baseline sm:gap-8">
-                                <p.icon className="h-5 w-5 text-gold" strokeWidth={1.4} />
+                            <div className="group grid grid-cols-1 items-center gap-6 py-10 transition-colors duration-300 hover:bg-cream sm:grid-cols-[3.5rem_3.5rem_14rem_1fr] sm:gap-8 sm:py-12">
+                                <span className="font-display text-[2rem] font-light leading-none text-[hsl(var(--gold)/0.3)] transition-colors duration-300 group-hover:text-gold">
+                                    0{i + 1}
+                                </span>
+                                <span className="flex h-12 w-12 items-center justify-center rounded-full border border-[hsl(var(--gold)/0.4)] transition-all duration-300 group-hover:scale-110 group-hover:border-[hsl(var(--gold))]">
+                                    <p.icon className="h-5 w-5 text-gold" strokeWidth={1.4} />
+                                </span>
                                 <h3 className="font-display text-[1.6rem] font-light text-foreground">{p.title}</h3>
                                 <p className="max-w-xl text-[0.95rem] font-light leading-relaxed text-muted-foreground">{p.text}</p>
                             </div>
