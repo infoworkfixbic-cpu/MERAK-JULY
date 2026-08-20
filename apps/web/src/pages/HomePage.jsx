@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { motion, useReducedMotion } from 'framer-motion';
-import { ChevronDown, Instagram, Menu, X, Droplets, Sparkles, ShieldCheck, Leaf, Rabbit, MapPin, FlaskConical, Truck, CreditCard, Quote } from 'lucide-react';
+import { ChevronDown, Instagram, Menu, X, Droplets, Sparkles, ShieldCheck, Leaf, Rabbit, MapPin, FlaskConical, Truck, Quote } from 'lucide-react';
 import Reveal from '@/components/Reveal';
 import Seo from '@/components/Seo';
 
@@ -194,7 +194,6 @@ const diferenciales = [
     { icon: Rabbit, label: 'Cruelty free' },
     { icon: MapPin, label: 'Hecho en Colombia' },
     { icon: Truck, label: 'Envíos a toda Colombia' },
-    { icon: CreditCard, label: 'Pago contra entrega o transferencia' },
 ];
 
 const testimonials = [
@@ -763,12 +762,14 @@ export default function HomePage() {
                         Lo que sí y lo que <span className="italic">nunca</span> encontrarás.
                     </h2>
                 </Reveal>
-                <div className="mt-12 grid grid-cols-1 gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-5">
+                <div className="mt-12 grid grid-cols-2 gap-px border border-border bg-border sm:grid-cols-3">
                     {diferenciales.map((d, i) => (
                         <Reveal key={d.label} delay={i * 0.06}>
-                            <div className="flex h-full flex-col justify-between gap-8 bg-background p-7 transition-colors duration-200 hover:bg-cream">
-                                <d.icon className="h-6 w-6 text-gold" strokeWidth={1.3} />
-                                <p className="text-[0.95rem] font-light leading-snug text-foreground">{d.label}</p>
+                            <div className="group flex h-full flex-col items-center gap-5 bg-background px-6 py-12 text-center transition-colors duration-200 hover:bg-cream">
+                                <span className="flex h-14 w-14 items-center justify-center rounded-full border border-[hsl(var(--gold)/0.4)] transition-colors duration-200 group-hover:border-[hsl(var(--gold))]">
+                                    <d.icon className="h-6 w-6 text-gold" strokeWidth={1.3} />
+                                </span>
+                                <p className="max-w-[10rem] text-[0.85rem] font-light leading-snug text-foreground">{d.label}</p>
                             </div>
                         </Reveal>
                     ))}
