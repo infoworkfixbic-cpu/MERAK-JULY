@@ -826,7 +826,7 @@ export default function HomePage() {
                     <Reveal delay={0.08}>
                         <p className="text-[0.66rem] uppercase tracking-[0.42em] text-gold">Nuestra historia</p>
                         <h2 className="mt-4 font-display text-[2.1rem] font-light leading-[1.12] text-foreground sm:text-[2.9rem]">
-                            ¿Qué es <span className="italic text-gold">MERAK</span>?
+                            ¿Qué es <span className="italic text-gold">MERAK</span>&nbsp;?
                         </h2>
                         <p className="mt-6 max-w-2xl text-[0.98rem] font-light leading-relaxed text-foreground/90">
                             MERAK significa hacer las cosas con el alma, con pasión, dejando algo de ti en lo que haces.
